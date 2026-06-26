@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.4 on win32)" generated="2026-06-25T22:45:16.621300" rpa="false" schemaversion="5">
+<suite id="s1" name="Regresive" source="C:\Users\allan\Desktop\PROYECTOS\Tarea 5\tests\regresive.robot">
+<test id="s1-t1" name="TC-001 Validar pagina publica desde Excel" line="7">
+<kw name="Preparar caso de prueba" owner="keywords" type="SETUP">
+<kw name="Cargar Variables De Excel" owner="datos_excel">
+<msg time="2026-06-25T22:45:24.485754" level="INFO">${codigo_caso} = TC-001</msg>
+<msg time="2026-06-25T22:45:24.486407" level="INFO">${fila_datos} = 1</msg>
+<msg time="2026-06-25T22:45:24.486883" level="INFO">${url} = https://www.brusheezy.com/</msg>
+<msg time="2026-06-25T22:45:24.487724" level="INFO">${title} = Free Photoshop Brushes at Brushehhghezy!</msg>
+<msg time="2026-06-25T22:45:24.488287" level="INFO">${expected_text} = Free Photoshop Brushes &amp; PSDs!</msg>
+<msg time="2026-06-25T22:45:24.488810" level="INFO">${browser} = Edge</msg>
+<msg time="2026-06-25T22:45:24.488863" level="INFO">Variables cargadas desde variables.xlsx, hoja TC-001, fila de datos 1</msg>
+<msg time="2026-06-25T22:45:24.488996" level="INFO">${codigo_cargado} = TC-001</msg>
+<var>${codigo_cargado}</var>
+<arg>${codigo_caso}</arg>
+<arg>${fila}</arg>
+<status status="PASS" start="2026-06-25T22:45:24.455523" elapsed="0.033511"/>
+</kw>
+<kw name="Iniciar Caso De Prueba" owner="reportes">
+<msg time="2026-06-25T22:45:24.489522" level="INFO">Reporte iniciado para: TC-001 Validar pagina publica desde Excel</msg>
+<status status="PASS" start="2026-06-25T22:45:24.489283" elapsed="0.000319"/>
+</kw>
+<kw name="Registrar Evidencia" owner="reportes">
+<arg>Datos cargados desde Excel para ${codigo_cargado}</arg>
+<arg>False</arg>
+<status status="PASS" start="2026-06-25T22:45:24.489751" elapsed="0.000246"/>
+</kw>
+<status status="PASS" start="2026-06-25T22:45:24.452583" elapsed="0.037518"/>
+</kw>
+<kw name="Abrir navegador" owner="keywords">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-06-25T22:45:24.491102" level="INFO">Opening browser 'Edge' to base url 'https://www.brusheezy.com/'.</msg>
+<msg time="2026-06-25T22:45:41.747036" level="INFO">Cannot capture screenshot because no browser is open.</msg>
+<msg time="2026-06-25T22:45:41.763238" level="FAIL">SessionNotCreatedException: Message: session not created: Microsoft Edge failed to start: crashed.
+  (chrome not reachable)
+  (The process started from msedge location C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe is no longer running, so msedgedriver is assuming that msedge has crashed.)
+Stacktrace:
+	msedgedriver!GetHandleVerifier [0x7ff74614c0a5+e205]
+	msedgedriver!GetHandleVerifier [0x7ff74614c104+e264]
+	msedgedriver!GetHandleVerifier [0x7ff7467d536a+6974ca]
+	msedgedriver!(No symbol) [0x7ff745b4ccb5]
+	msedgedriver!(No symbol) [0x7ff745b48938]
+	msedgedriver!(No symbol) [0x7ff745b891d3]
+	msedgedriver!(No symbol) [0x7ff745b88b66]
+	msedgedriver!(No symbol) [0x7ff745b5482c]
+	msedgedriver!(No symbol) [0x7ff745b53a86]
+	msedgedriver!(No symbol) [0x7ff745b54653]
+	msedgedriver!(No symbol) [0x7ff745d8afd1]
+	msedgedriver!(No symbol) [0x7ff745d87788]
+	msedgedriver!(No symbol) [0x7ff745d981c9]
+	msedgedriver!GetHandleVerifier [0x7ff746168341+2a4a1]
+	msedgedriver!GetHandleVerifier [0x7ff746171126+33286]
+	msedgedriver!GetHandleVerifier [0x7ff746153e04+15f64]
+	msedgedriver!GetHandleVerifier [0x7ff746153f25+16085]
+	msedgedriver!GetHandleVerifier [0x7ff7461403a3+2503]
+	KERNEL32!BaseThreadInitThunk [0x7ff990c87c24+14]
+	ntdll!RtlUserThreadStart [0x7ff9915cd4d1+21]
+</msg>
+<arg>${url}</arg>
+<arg>${browser}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="FAIL" start="2026-06-25T22:45:24.490822" elapsed="18.451608">SessionNotCreatedException: Message: session not created: Microsoft Edge failed to start: crashed.
+  (chrome not reachable)
+  (The process started from msedge location C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe is no longer running, so msedgedriver is assuming that msedge has crashed.)
+Stacktrace:
+	msedgedriver!GetHandleVerifier [0x7ff74614c0a5+e205]
+	msedgedriver!GetHandleVerifier [0x7ff74614c104+e264]
+	msedgedriver!GetHandleVerifier [0x7ff7467d536a+6974ca]
+	msedgedriver!(No symbol) [0x7ff745b4ccb5]
+	msedgedriver!(No symbol) [0x7ff745b48938]
+	msedgedriver!(No symbol) [0x7ff745b891d3]
+	msedgedriver!(No symbol) [0x7ff745b88b66]
+	msedgedriver!(No symbol) [0x7ff745b5482c]
+	msedgedriver!(No symbol) [0x7ff745b53a86]
+	msedgedriver!(No symbol) [0x7ff745b54653]
+	msedgedriver!(No symbol) [0x7ff745d8afd1]
+	msedgedriver!(No symbol) [0x7ff745d87788]
+	msedgedriver!(No symbol) [0x7ff745d981c9]
+	msedgedriver!GetHandleVerifier [0x7ff746168341+2a4a1]
+	msedgedriver!GetHandleVerifier [0x7ff746171126+33286]
+	msedgedriver!GetHandleVerifier [0x7ff746153e04+15f64]
+	msedgedriver!GetHandleVerifier [0x7ff746153f25+16085]
+	msedgedriver!GetHandleVerifier [0x7ff7461403a3+2503]
+	KERNEL32!BaseThreadInitThunk [0x7ff990c87c24+14]
+	ntdll!RtlUserThreadStart [0x7ff9915cd4d1+21]
+</status>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2026-06-25T22:45:42.951236" elapsed="0.000991"/>
+</kw>
+<kw name="Registrar Evidencia" owner="reportes">
+<arg>Navegador abierto en ${url}</arg>
+<status status="NOT RUN" start="2026-06-25T22:45:42.953359" elapsed="0.000060"/>
+</kw>
+<arg>${url}</arg>
+<arg>${browser}</arg>
+<status status="FAIL" start="2026-06-25T22:45:24.490332" elapsed="18.464274">SessionNotCreatedException: Message: session not created: Microsoft Edge failed to start: crashed.
+  (chrome not reachable)
+  (The process started from msedge location C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe is no longer running, so msedgedriver is assuming that msedge has crashed.)
+Stacktrace:
+	msedgedriver!GetHandleVerifier [0x7ff74614c0a5+e205]
+	msedgedriver!GetHandleVerifier [0x7ff74614c104+e264]
+	msedgedriver!GetHandleVerifier [0x7ff7467d536a+6974ca]
+	msedgedriver!(No symbol) [0x7ff745b4ccb5]
+	msedgedriver!(No symbol) [0x7ff745b48938]
+	msedgedriver!(No symbol) [0x7ff745b891d3]
+	msedgedriver!(No symbol) [0x7ff745b88b66]
+	msedgedriver!(No symbol) [0x7ff745b5482c]
+	msedgedriver!(No symbol) [0x7ff745b53a86]
+	msedgedriver!(No symbol) [0x7ff745b54653]
+	msedgedriver!(No symbol) [0x7ff745d8afd1]
+	msedgedriver!(No symbol) [0x7ff745d87788]
+	msedgedriver!(No symbol) [0x7ff745d981c9]
+	msedgedriver!GetHandleVerifier [0x7ff746168341+2a4a1]
+	msedgedriver!GetHandleVerifier [0x7ff746171126+33286]
+	msedgedriver!GetHandleVerifier [0x7ff746153e04+15f64]
+	msedgedriver!GetHandleVerifier [0x7ff746153f25+16085]
+	msedgedriver!GetHandleVerifier [0x7ff7461403a3+2503]
+	KERNEL32!BaseThreadInitThunk [0x7ff990c87c24+14]
+	ntdll!RtlUserThreadStart [0x7ff9915cd4d1+21]
+</status>
+</kw>
+<kw name="Validar titulo de pagina" owner="keywords">
+<arg>${title}</arg>
+<status status="NOT RUN" start="2026-06-25T22:45:42.959421" elapsed="0.000121"/>
+</kw>
+<kw name="Validar texto visible" owner="keywords">
+<arg>${expected_text}</arg>
+<status status="NOT RUN" start="2026-06-25T22:45:42.959759" elapsed="0.000034"/>
+</kw>
+<kw name="Finalizar Caso De Prueba" owner="reportes" type="TEARDOWN">
+<msg time="2026-06-25T22:45:42.970819" level="INFO">Cannot capture screenshot because no browser is open.</msg>
+<msg time="2026-06-25T22:45:43.069242" level="INFO">Evidencia HTML: C:\Users\allan\Desktop\PROYECTOS\Tarea 5\results\evidencia-TC-001-Validar-pagina-publica-desde-Excel-20260625-224524.html</msg>
+<msg time="2026-06-25T22:45:43.069482" level="INFO">Evidencia PDF: C:\Users\allan\Desktop\PROYECTOS\Tarea 5\results\evidencia-TC-001-Validar-pagina-publica-desde-Excel-20260625-224524.pdf</msg>
+<status status="PASS" start="2026-06-25T22:45:42.963387" elapsed="0.106641"/>
+</kw>
+<tag>TC-001</tag>
+<status status="FAIL" start="2026-06-25T22:45:24.450395" elapsed="18.619848">SessionNotCreatedException: Message: session not created: Microsoft Edge failed to start: crashed.
+  (chrome not reachable)
+  (The process started from msedge location C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe is no longer running, so msedgedriver is assuming that msedge has crashed.)
+Stacktrace:
+	msedgedriver!GetHandleVerifier [0x7ff74614c0a5+e205]
+	msedgedriver!GetHandleVerifier [0x7ff74614c104+e264]
+	msedgedriver!GetHandleVerifier [0x7ff7467d536a+6974ca]
+	msedgedriver!(No symbol) [0x7ff745b4ccb5]
+	msedgedriver!(No symbol) [0x7ff745b48938]
+	msedgedriver!(No symbol) [0x7ff745b891d3]
+	msedgedriver!(No symbol) [0x7ff745b88b66]
+	msedgedriver!(No symbol) [0x7ff745b5482c]
+	msedgedriver!(No symbol) [0x7ff745b53a86]
+	msedgedriver!(No symbol) [0x7ff745b54653]
+	msedgedriver!(No symbol) [0x7ff745d8afd1]
+	msedgedriver!(No symbol) [0x7ff745d87788]
+	msedgedriver!(No symbol) [0x7ff745d981c9]
+	msedgedriver!GetHandleVerifier [0x7ff746168341+2a4a1]
+	msedgedriver!GetHandleVerifier [0x7ff746171126+33286]
+	msedgedriver!GetHandleVerifier [0x7ff746153e04+15f64]
+	msedgedriver!GetHandleVerifier [0x7ff746153f25+16085]
+	msedgedriver!GetHandleVerifier [0x7ff7461403a3+2503]
+	KERNEL32!BaseThreadInitThunk [0x7ff990c87c24+14]
+	ntdll!RtlUserThreadStart [0x7ff9915cd4d1+21]
+</status>
+</test>
+<status status="FAIL" start="2026-06-25T22:45:16.625018" elapsed="26.458035"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="1" skip="0">TC-001</stat>
+</tag>
+<suite>
+<stat name="Regresive" id="s1" pass="0" fail="1" skip="0">Regresive</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

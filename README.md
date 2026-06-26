@@ -25,6 +25,7 @@ tests/
   regresive.robot          Suite principal de ejemplo
 resources/
   keywords.robot           Keywords reutilizables de Selenium y evidencia
+  datos_excel.py           Libreria para cargar variables desde Excel
   reportes.py              Libreria Python para HTML/PDF
 variables/
   variables.xlsx           Datos de entrada por caso
@@ -91,7 +92,8 @@ python -m robot --dryrun --outputdir results tests/regresive.robot
 4. En la fila 2 coloca los valores que usara el caso.
 5. Crea el caso en `tests/regresive.robot`.
 6. Agrega el tag con el mismo nombre de la hoja.
-7. Importa las variables del Excel con `Import Variables`.
+7. Escribe solo los pasos de negocio; el `Test Setup` carga el Excel y abre el
+   reporte automaticamente.
 
 Ejemplo:
 
@@ -99,11 +101,20 @@ Ejemplo:
 *** Test Cases ***
 TC-002 Buscar texto desde Excel
     [Tags]   TC-002
-    Import Variables   ../variables/variables.py   TC-002
-    Iniciar caso de prueba
     Abrir navegador   ${url}   ${browser}
     Validar texto visible   ${expected_text}
 ```
+
+La suite ya incluye este setup:
+
+```robot
+Test Setup   Preparar caso de prueba
+Test Teardown   Finalizar caso de prueba
+```
+
+`Preparar caso de prueba` toma el tag `TC-XXX`, busca una hoja con ese mismo
+nombre en `variables/variables.xlsx`, convierte los encabezados en variables de
+Robot y arranca el reporte.
 
 ## Formato del Excel
 
@@ -119,12 +130,20 @@ Reglas:
 
 - La primera fila siempre son encabezados.
 - Cada encabezado se convierte en variable Robot: `url` sera `${url}`.
+- Los encabezados se normalizan a minusculas y guion bajo: `Expected Text`
+  sera `${expected_text}`.
 - La fila 2 es la primera fila de datos.
 - Puedes agregar columnas nuevas sin modificar `variables.py`.
 - Si quieres usar otra fila de datos, pasa el numero como segundo argumento:
 
 ```robot
-Import Variables   ../variables/variables.py   TC-001   2
+[Setup]   Preparar caso de prueba   TC-001   2
+```
+
+Tambien puedes cargar una hoja especifica manualmente en un caso especial:
+
+```robot
+Preparar caso de prueba   TC-003
 ```
 
 ## Evidencia HTML/PDF
@@ -138,6 +157,7 @@ La libreria `resources/reportes.py` agrega estas keywords:
 La suite usa:
 
 ```robot
+Test Setup      Preparar caso de prueba
 Test Teardown   Finalizar caso de prueba
 ```
 
@@ -160,9 +180,11 @@ Registrar evidencia   Se completo el paso de busqueda
 3. Mantiene una hoja por caso: `TC-001`, `TC-002`, etc.
 4. Cambia o agrega keywords en `resources/keywords.robot`.
 5. Crea suites nuevas dentro de `tests/`.
-6. Ejecuta con `python -m robot --argumentfile robot.args tests/regresive.robot`.
-7. Revisa `results/report.html` para diagnostico tecnico.
-8. Usa `results/evidencia-*.pdf` como evidencia ejecutiva.
+6. En cada suite importa `../resources/keywords.robot`, usa
+   `Test Setup   Preparar caso de prueba` y `Test Teardown   Finalizar caso de prueba`.
+7. Ejecuta con `python -m robot --argumentfile robot.args tests/regresive.robot`.
+8. Revisa `results/report.html` para diagnostico tecnico.
+9. Usa `results/evidencia-*.pdf` como evidencia ejecutiva.
 
 ## Problemas comunes
 

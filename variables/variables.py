@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 from openpyxl import load_workbook
 
@@ -19,7 +20,7 @@ def get_variables(testcase="TC-001", fila=1, archivo=None):
     if not filas:
         raise ValueError(f"La hoja {hoja} esta vacia")
 
-    columnas = [str(columna).strip() for columna in filas[0] if columna]
+    columnas = [_normalizar_variable(columna) for columna in filas[0] if columna]
     if not columnas:
         raise ValueError(f"La hoja {hoja} no tiene encabezados")
 
@@ -35,7 +36,22 @@ def get_variables(testcase="TC-001", fila=1, archivo=None):
 
 
 def _normalizar_hoja(testcase):
-    valor = str(testcase).strip()
+    valor = str(testcase).strip().upper().replace("_", "-")
     if valor.isdigit():
         return f"TC-{int(valor):03}"
+
+    match = re.fullmatch(r"TC-?(\d{1,4})", valor)
+    if match:
+        return f"TC-{int(match.group(1)):03}"
+
     return valor
+
+
+def _normalizar_variable(nombre):
+    variable = str(nombre).strip().lower()
+    variable = re.sub(r"\s+", "_", variable)
+    variable = re.sub(r"[^a-z0-9_]", "_", variable)
+    variable = re.sub(r"_+", "_", variable).strip("_")
+    if not variable:
+        raise ValueError("Hay un encabezado vacio o invalido en el Excel")
+    return variable
