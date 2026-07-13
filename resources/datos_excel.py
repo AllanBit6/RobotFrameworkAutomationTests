@@ -24,16 +24,26 @@ def cargar_variables_de_excel(codigo_caso=None, fila=1, archivo=None):
     return codigo
 
 
+def obtener_filas_con_datos(codigo_caso, archivo=None):
+    codigo = _normalizar_codigo(codigo_caso)
+    ruta_excel = Path(archivo).resolve() if archivo else RUTA_EXCEL_DEFAULT
+    return _leer_filas_con_datos(ruta_excel, codigo)
+
+
 def obtener_codigo_caso_actual():
     return _normalizar_codigo(_codigo_desde_tags())
 
 
 def _leer_variables(ruta_excel, hoja, fila_datos):
     libro = _load_workbook(ruta_excel, data_only=True, read_only=True)
-    if hoja not in libro.sheetnames:
-        raise ValueError(f"No existe la hoja {hoja} en {ruta_excel}")
+    try:
+        if hoja not in libro.sheetnames:
+            raise ValueError(f"No existe la hoja {hoja} en {ruta_excel}")
 
-    filas = list(libro[hoja].iter_rows(values_only=True))
+        filas = list(libro[hoja].iter_rows(values_only=True))
+    finally:
+        libro.close()
+
     if not filas:
         raise ValueError(f"La hoja {hoja} esta vacia")
 
@@ -50,6 +60,35 @@ def _leer_variables(ruta_excel, hoja, fila_datos):
         encabezado: valores[indice] if indice < len(valores) and valores[indice] is not None else ""
         for indice, encabezado in enumerate(encabezados)
     }
+
+
+def _leer_filas_con_datos(ruta_excel, hoja):
+    libro = _load_workbook(ruta_excel, data_only=True, read_only=True)
+    try:
+        if hoja not in libro.sheetnames:
+            raise ValueError(f"No existe la hoja {hoja} en {ruta_excel}")
+
+        filas = list(libro[hoja].iter_rows(values_only=True))
+    finally:
+        libro.close()
+
+    if not filas:
+        raise ValueError(f"La hoja {hoja} esta vacia")
+
+    encabezados = [_normalizar_variable(celda) for celda in filas[0] if celda]
+    if not encabezados:
+        raise ValueError(f"La hoja {hoja} no tiene encabezados")
+
+    filas_con_datos = []
+    for indice_fila, valores in enumerate(filas[1:], start=1):
+        valores_variables = [
+            valores[indice] if indice < len(valores) else None
+            for indice in range(len(encabezados))
+        ]
+        if any(_tiene_dato(valor) for valor in valores_variables):
+            filas_con_datos.append(indice_fila)
+
+    return filas_con_datos
 
 
 def _codigo_desde_tags():
@@ -80,3 +119,7 @@ def _normalizar_variable(nombre):
     if not variable:
         raise ValueError("Hay un encabezado vacio o invalido en el Excel")
     return variable
+
+
+def _tiene_dato(valor):
+    return valor is not None and str(valor).strip() != ""

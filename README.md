@@ -1,60 +1,53 @@
 # Proyecto base de automatizacion con Robot Framework
 
-Este repositorio es una plantilla corta para crear proyectos de pruebas
-automatizadas con Robot Framework, SeleniumLibrary, datos desde Excel y
-evidencia por caso en HTML/PDF.
+Plantilla para pruebas automatizadas con Robot Framework, SeleniumLibrary,
+datos desde Excel y evidencia individual en HTML/PDF.
 
-La idea es poder clonar este repo, cambiar el Excel, escribir nuevos casos y
-mantener siempre la misma salida de reportes.
+El flujo recomendado es:
 
-## Que genera
+1. Escribir los datos en `variables/variables.xlsx`.
+2. Crear o actualizar casos en `tests/`.
+3. Reutilizar keywords de `resources/keywords.robot`.
+4. Ejecutar con `robot.args`.
+5. Revisar resultados en `results/`.
 
-Cada ejecucion crea archivos en `results/`:
-
-- `output.xml`: resultado tecnico de Robot Framework.
-- `log.html`: detalle completo de ejecucion.
-- `report.html`: resumen nativo de Robot Framework.
-- `evidencia-*.html`: evidencia ejecutiva por caso.
-- `evidencia-*.pdf`: evidencia ejecutiva por caso.
-- `*.png`: capturas tomadas durante la prueba.
-
-## Estructura
+## Estructura del repo
 
 ```text
 tests/
   regresive.robot          Suite principal de ejemplo
+
 resources/
-  keywords.robot           Keywords reutilizables de Selenium y evidencia
-  datos_excel.py           Libreria para cargar variables desde Excel
-  reportes.py              Libreria Python para HTML/PDF
+  keywords.robot           Keywords de negocio reutilizables
+  datos_excel.py           Lectura de variables desde Excel
+  expandir_excel.py        Repite tests segun filas llenas del Excel
+  reportes.py              Evidencia HTML/PDF por ejecucion
+
 variables/
   variables.xlsx           Datos de entrada por caso
-  variables.py             Lector generico del Excel
-robot.args                 Argumentos comunes de Robot
+  variables.py             Lector generico opcional
+
+docs/
+  KEYWORDS.md              Catalogo de keywords nativas y propias
+
+robot.args                 Argumentos comunes de ejecucion
 requirements.txt           Dependencias Python
 results/                   Reportes generados
 ```
 
-## Requisitos
+## Instalar
 
 Instala Python 3.10 o superior y un navegador compatible con Selenium.
-En Windows puedes validar Edge o Chrome con:
-
-```powershell
-where msedge
-where chrome
-```
-
-Instala las dependencias:
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-Para una instalacion minima en un proyecto nuevo:
+Para validar navegadores en Windows:
 
 ```powershell
-python -m pip install robotframework robotframework-seleniumlibrary openpyxl fpdf2
+where msedge
+where chrome
 ```
 
 ## Ejecutar
@@ -65,35 +58,70 @@ Ejecutar toda la suite:
 python -m robot --argumentfile robot.args tests/regresive.robot
 ```
 
-Ejecutar indicando la carpeta de salida manualmente:
+Validar sintaxis sin abrir navegador:
 
 ```powershell
-python -m robot --outputdir results tests/regresive.robot
+python -m robot --dryrun --argumentfile robot.args tests/regresive.robot
 ```
 
 Ejecutar un caso especifico:
 
 ```powershell
-python -m robot --outputdir results -t "TC-001 Validar pagina publica desde Excel" tests/regresive.robot
+python -m robot --argumentfile robot.args -t "TC-001 Validar pagina publica desde Excel" tests/regresive.robot
 ```
 
-Validar sintaxis sin abrir navegador:
+`robot.args` ya configura:
 
-```powershell
-python -m robot --dryrun --outputdir results tests/regresive.robot
+```text
+--outputdir
+results
+--prerunmodifier
+resources.expandir_excel.ExpandirCasosExcel
 ```
 
-## Como crear un caso de prueba
+El `prerunmodifier` revisa el Excel antes de ejecutar y repite cada caso por
+cada fila llena de datos.
 
-1. Crea una hoja en `variables/variables.xlsx`.
-2. Nombra la hoja igual que el codigo del caso, por ejemplo `TC-002`.
-3. En la fila 1 coloca los nombres de variables: `url`, `browser`, `title`,
-   `expected_text`, etc.
-4. En la fila 2 coloca los valores que usara el caso.
-5. Crea el caso en `tests/regresive.robot`.
-6. Agrega el tag con el mismo nombre de la hoja.
-7. Escribe solo los pasos de negocio; el `Test Setup` carga el Excel y abre el
-   reporte automaticamente.
+## Flujo de Excel
+
+Cada hoja del Excel representa un caso. El nombre de la hoja debe coincidir con
+el tag del test.
+
+Ejemplo: hoja `TC-001`
+
+| url | browser | title | expected_text |
+| --- | --- | --- | --- |
+| https://www.example.com | Edge | Example Domain | Example Domain |
+| https://www.python.org | Edge | Welcome to Python.org | Python |
+
+Reglas:
+
+- La fila 1 siempre contiene encabezados.
+- Cada encabezado se convierte en variable Robot.
+- `Expected Text` se normaliza como `${expected_text}`.
+- La primera fila de datos es la fila 2 del Excel, pero internamente se usa
+  como fila de datos `1`.
+- Si una hoja tiene 2 filas llenas, el caso se ejecuta 2 veces.
+- Si una hoja tiene 1 fila llena, el caso se ejecuta 1 vez.
+- Las filas completamente vacias se ignoran.
+
+Con el ejemplo anterior, Robot genera ejecuciones separadas:
+
+```text
+TC-001 Validar pagina publica desde Excel - datos 1
+TC-001 Validar pagina publica desde Excel - datos 2
+```
+
+Cada ejecucion carga sus variables y genera evidencia propia.
+
+## Crear un caso
+
+1. Crea una hoja en `variables/variables.xlsx`, por ejemplo `TC-002`.
+2. Agrega encabezados en la fila 1: `url`, `browser`, `expected_text`, etc.
+3. Llena una o mas filas de datos.
+4. Crea el test en `tests/regresive.robot` o en otra suite dentro de `tests/`.
+5. Agrega el tag con el mismo codigo de la hoja.
+6. Usa keywords de `resources/keywords.robot`.
 
 Ejemplo:
 
@@ -105,92 +133,78 @@ TC-002 Buscar texto desde Excel
     Validar texto visible   ${expected_text}
 ```
 
-La suite ya incluye este setup:
+La suite debe importar el recurso y usar setup/teardown:
 
 ```robot
-Test Setup   Preparar caso de prueba
-Test Teardown   Finalizar caso de prueba
-```
-
-`Preparar caso de prueba` toma el tag `TC-XXX`, busca una hoja con ese mismo
-nombre en `variables/variables.xlsx`, convierte los encabezados en variables de
-Robot y arranca el reporte.
-
-## Formato del Excel
-
-Cada hoja representa un caso o modulo de prueba.
-
-Ejemplo de hoja `TC-001`:
-
-| url | browser | title | expected_text |
-| --- | --- | --- | --- |
-| https://www.example.com | Edge | Example Domain | Example Domain |
-
-Reglas:
-
-- La primera fila siempre son encabezados.
-- Cada encabezado se convierte en variable Robot: `url` sera `${url}`.
-- Los encabezados se normalizan a minusculas y guion bajo: `Expected Text`
-  sera `${expected_text}`.
-- La fila 2 es la primera fila de datos.
-- Puedes agregar columnas nuevas sin modificar `variables.py`.
-- Si quieres usar otra fila de datos, pasa el numero como segundo argumento:
-
-```robot
-[Setup]   Preparar caso de prueba   TC-001   2
-```
-
-Tambien puedes cargar una hoja especifica manualmente en un caso especial:
-
-```robot
-Preparar caso de prueba   TC-003
-```
-
-## Evidencia HTML/PDF
-
-La libreria `resources/reportes.py` agrega estas keywords:
-
-- `Iniciar caso de prueba`
-- `Registrar evidencia`
-- `Finalizar caso de prueba`
-
-La suite usa:
-
-```robot
+*** Settings ***
+Resource        ../resources/keywords.robot
 Test Setup      Preparar caso de prueba
 Test Teardown   Finalizar caso de prueba
 ```
 
-Eso permite que, aunque el caso falle, se capture el estado final, se cierre el
-navegador y se escriban los archivos `evidencia-*.html` y `evidencia-*.pdf` en
-`results/`.
+## Keywords
 
-Las keywords de `resources/keywords.robot` ya registran evidencia al abrir el
-navegador y despues de cada validacion exitosa. Para agregar una evidencia
-manual:
+El catalogo completo esta en `docs/KEYWORDS.md`.
+
+Las mas usadas son:
+
+| Keyword | Uso |
+| --- | --- |
+| `Preparar caso de prueba` | Carga Excel e inicia evidencia. |
+| `Abrir navegador` | Abre navegador y registra evidencia. |
+| `Esperar elemento visible` | Espera un elemento antes de interactuar. |
+| `Presionar elemento` | Click sobre cualquier elemento. |
+| `Introducir texto` | Escribe en un campo. |
+| `Limpiar e introducir texto` | Limpia y escribe en un campo. |
+| `Validar texto visible` | Valida texto en la pagina. |
+| `Validar elemento contiene texto` | Valida texto dentro de un elemento. |
+| `Registrar evidencia` | Agrega un paso manual al HTML/PDF. |
+| `Finalizar caso de prueba` | Cierra navegador y genera evidencia. |
+
+Tambien puedes usar directamente keywords nativas de SeleniumLibrary como
+`Click Element`, `Input Text`, `Page Should Contain`, `Title Should Be` y
+`Wait Until Element Is Visible`.
+
+## Evidencia y reportes
+
+Cada ejecucion crea archivos en `results/`:
+
+- `output.xml`: resultado tecnico de Robot Framework.
+- `log.html`: detalle completo de ejecucion.
+- `report.html`: resumen nativo de Robot Framework.
+- `evidencia-*.html`: evidencia ejecutiva por caso.
+- `evidencia-*.pdf`: evidencia ejecutiva por caso.
+- `*.png`: capturas tomadas durante la prueba.
+
+La evidencia se genera aunque el caso falle, porque `Finalizar caso de prueba`
+esta configurado como `Test Teardown`.
+
+## Agregar mas keywords
+
+Agrega wrappers nuevos en `resources/keywords.robot` cuando una accion se repita
+en varios casos o cuando quieras registrar evidencia automaticamente.
+
+Ejemplo:
 
 ```robot
-Registrar evidencia   Se completo el paso de busqueda
+Buscar texto
+    [Arguments]   ${locator}   ${texto}
+    Limpiar e introducir texto   ${locator}   ${texto}
+    Press Keys   ${locator}   ENTER
+    Registrar evidencia   Busqueda enviada: ${texto}
 ```
 
-## Como clonar para otro proyecto
-
-1. Copia o clona este repositorio.
-2. Cambia `variables/variables.xlsx` por el Excel del nuevo proyecto.
-3. Mantiene una hoja por caso: `TC-001`, `TC-002`, etc.
-4. Cambia o agrega keywords en `resources/keywords.robot`.
-5. Crea suites nuevas dentro de `tests/`.
-6. En cada suite importa `../resources/keywords.robot`, usa
-   `Test Setup   Preparar caso de prueba` y `Test Teardown   Finalizar caso de prueba`.
-7. Ejecuta con `python -m robot --argumentfile robot.args tests/regresive.robot`.
-8. Revisa `results/report.html` para diagnostico tecnico.
-9. Usa `results/evidencia-*.pdf` como evidencia ejecutiva.
+Si solo necesitas una accion una vez, puedes usar la keyword nativa directamente
+en el test.
 
 ## Problemas comunes
 
-- Si no abre navegador, valida que Selenium pueda encontrar el navegador.
-- Si faltan variables, revisa que el nombre de la hoja y los encabezados del
-  Excel coincidan con lo que usa el `.robot`.
-- Si no aparece el PDF, revisa `results/log.html`; el teardown registra las
-  rutas o errores de evidencia.
-- Si el caso falla por titulo o texto esperado, corrige los valores del Excel.
+- Si no abre navegador, valida que Edge o Chrome esten instalados.
+- Si faltan variables, revisa el nombre de la hoja, el tag `TC-XXX` y los
+  encabezados del Excel.
+- Si un caso no se repite, valida que las filas tengan al menos una variable
+  llena.
+- Si no aparece el PDF, revisa `results/log.html`; el teardown registra errores
+  de evidencia.
+- Si falla una validacion, corrige los datos esperados en Excel o ajusta la
+  keyword del test.
