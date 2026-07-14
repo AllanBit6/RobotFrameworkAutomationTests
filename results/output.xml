@@ -1,82 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.4.2 (Python 3.14.4 on win32)" generated="2026-07-12T18:04:44.242456" rpa="false" schemaversion="5">
+<robot generator="Robot 7.4.2 (Python 3.14.4 on win32)" generated="2026-07-13T19:47:53.276321" rpa="false" schemaversion="5">
 <suite id="s1" name="Regresive" source="C:\Users\allan\Downloads\RobotFrameworkAutomationTests\tests\regresive.robot">
 <test id="s1-t1" name="TC-001 Validar pagina publica desde Excel" line="7">
 <kw name="Preparar caso de prueba" owner="keywords" type="SETUP">
-<kw name="Cargar Variables De Excel" owner="datos_excel">
+<kw name="Cargar variables de excel" owner="excel">
 <var>${codigo_cargado}</var>
 <arg>${codigo_caso}</arg>
 <arg>${fila}</arg>
-<status status="NOT RUN" start="2026-07-12T18:04:46.072430" elapsed="0.000170"/>
+<arg>${archivo}</arg>
+<status status="NOT RUN" start="2026-07-13T19:47:56.078789" elapsed="0.000169"/>
 </kw>
-<kw name="Iniciar Caso De Prueba" owner="reportes">
-<status status="NOT RUN" start="2026-07-12T18:04:46.072855" elapsed="0.000082"/>
+<kw name="Iniciar caso de prueba" owner="reportes">
+<status status="NOT RUN" start="2026-07-13T19:47:56.079188" elapsed="0.000088"/>
 </kw>
-<kw name="Registrar Evidencia" owner="reportes">
+<kw name="Registrar evidencia" owner="reportes">
 <arg>Datos cargados desde Excel para ${codigo_cargado}, fila ${fila}</arg>
 <arg>False</arg>
-<status status="NOT RUN" start="2026-07-12T18:04:46.073082" elapsed="0.000137"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.079538" elapsed="0.000169"/>
 </kw>
 <arg>TC-001</arg>
 <arg>1</arg>
+<arg>variables/variables.xlsx</arg>
 <doc>Carga variables desde Excel segun el tag TC-XXX e inicia la evidencia del caso.</doc>
-<status status="PASS" start="2026-07-12T18:04:46.070693" elapsed="0.002623"/>
+<status status="PASS" start="2026-07-13T19:47:56.077699" elapsed="0.002102"/>
 </kw>
 <kw name="Abrir navegador" owner="keywords">
 <kw name="Open Browser" owner="SeleniumLibrary">
 <arg>${url}</arg>
 <arg>${browser}</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<status status="NOT RUN" start="2026-07-12T18:04:46.073962" elapsed="0.000116"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.080422" elapsed="0.000097"/>
 </kw>
 <kw name="Maximize Browser Window" owner="SeleniumLibrary">
 <doc>Maximizes current browser window.</doc>
-<status status="NOT RUN" start="2026-07-12T18:04:46.074243" elapsed="0.000062"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.080674" elapsed="0.000072"/>
 </kw>
-<kw name="Registrar Evidencia" owner="reportes">
+<kw name="Registrar evidencia" owner="reportes">
 <arg>Navegador abierto en ${url}</arg>
-<status status="NOT RUN" start="2026-07-12T18:04:46.074439" elapsed="0.000084"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.080853" elapsed="0.000085"/>
 </kw>
 <arg>${url}</arg>
 <arg>${browser}</arg>
 <doc>Abre el navegador en la URL indicada, maximiza la ventana y registra evidencia.</doc>
-<status status="PASS" start="2026-07-12T18:04:46.073603" elapsed="0.001003"/>
+<status status="PASS" start="2026-07-13T19:47:56.080088" elapsed="0.000941"/>
 </kw>
 <kw name="Validar titulo de pagina" owner="keywords">
 <kw name="Title Should Be" owner="SeleniumLibrary">
 <arg>${title}</arg>
 <doc>Verifies that the current page title equals ``title``.</doc>
-<status status="NOT RUN" start="2026-07-12T18:04:46.075044" elapsed="0.000088"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.081449" elapsed="0.000100"/>
 </kw>
-<kw name="Registrar Evidencia" owner="reportes">
+<kw name="Registrar evidencia" owner="reportes">
 <arg>Titulo validado: ${title}</arg>
-<status status="NOT RUN" start="2026-07-12T18:04:46.075276" elapsed="0.000083"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.081699" elapsed="0.000071"/>
 </kw>
 <arg>${title}</arg>
 <doc>Valida que el titulo de la pagina sea exactamente el esperado.</doc>
-<status status="PASS" start="2026-07-12T18:04:46.074788" elapsed="0.000639"/>
+<status status="PASS" start="2026-07-13T19:47:56.081214" elapsed="0.000615"/>
 </kw>
 <kw name="Validar texto visible" owner="keywords">
 <kw name="Page Should Contain" owner="SeleniumLibrary">
 <arg>${expected_text}</arg>
 <doc>Verifies that current page contains ``text``.</doc>
-<status status="NOT RUN" start="2026-07-12T18:04:46.075749" elapsed="0.000058"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.082210" elapsed="0.000060"/>
 </kw>
-<kw name="Registrar Evidencia" owner="reportes">
+<kw name="Registrar evidencia" owner="reportes">
 <arg>Texto visible validado: ${expected_text}</arg>
-<status status="NOT RUN" start="2026-07-12T18:04:46.075901" elapsed="0.000051"/>
+<status status="NOT RUN" start="2026-07-13T19:47:56.082369" elapsed="0.000056"/>
 </kw>
 <arg>${expected_text}</arg>
 <doc>Valida que el texto esperado exista en la pagina.</doc>
-<status status="PASS" start="2026-07-12T18:04:46.075569" elapsed="0.000426"/>
+<status status="PASS" start="2026-07-13T19:47:56.082004" elapsed="0.000467"/>
 </kw>
-<kw name="Finalizar Caso De Prueba" owner="reportes" type="TEARDOWN">
-<status status="NOT RUN" start="2026-07-12T18:04:46.076158" elapsed="0.000049"/>
+<kw name="Finalizar caso de prueba" owner="reportes" type="TEARDOWN">
+<status status="NOT RUN" start="2026-07-13T19:47:56.082650" elapsed="0.000054"/>
 </kw>
 <tag>TC-001</tag>
-<status status="PASS" start="2026-07-12T18:04:46.067641" elapsed="0.008617"/>
+<status status="PASS" start="2026-07-13T19:47:56.071637" elapsed="0.011115"/>
 </test>
-<status status="PASS" start="2026-07-12T18:04:44.247403" elapsed="1.829348"/>
+<status status="PASS" start="2026-07-13T19:47:53.282769" elapsed="2.800597"/>
 </suite>
 <statistics>
 <total>

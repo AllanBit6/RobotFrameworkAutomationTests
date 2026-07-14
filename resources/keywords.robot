@@ -1,14 +1,14 @@
 *** Settings ***
 Library   SeleniumLibrary
-Library   reportes.py
-Library   datos_excel.py
+Library   ${CURDIR}/libraries/reportes.py
+Library   ${CURDIR}/libraries/excel.py
 
 *** Keywords ***
 # Flujo del caso
 Preparar caso de prueba
     [Documentation]   Carga variables desde Excel segun el tag TC-XXX e inicia la evidencia del caso.
-    [Arguments]   ${codigo_caso}=${EMPTY}   ${fila}=1
-    ${codigo_cargado}=   Cargar variables de excel   ${codigo_caso}   ${fila}
+    [Arguments]   ${codigo_caso}=${EMPTY}   ${fila}=1   ${archivo}=${EMPTY}
+    ${codigo_cargado}=   Cargar variables de excel   ${codigo_caso}   ${fila}   ${archivo}
     Iniciar caso de prueba
     Registrar evidencia   Datos cargados desde Excel para ${codigo_cargado}, fila ${fila}   False
 

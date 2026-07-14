@@ -1,4 +1,4 @@
 --outputdir
 results
 --prerunmodifier
-resources.expandir_excel.ExpandirCasosExcel
+resources.modifiers.expandir_excel.ExpandirCasosExcel

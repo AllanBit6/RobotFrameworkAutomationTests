@@ -19,9 +19,16 @@ tests/
 
 resources/
   keywords.robot           Keywords de negocio reutilizables
-  datos_excel.py           Lectura de variables desde Excel
-  expandir_excel.py        Repite tests segun filas llenas del Excel
-  reportes.py              Evidencia HTML/PDF por ejecucion
+  datos_excel.py           Wrapper compatible hacia libraries/excel.py
+  expandir_excel.py        Wrapper compatible hacia modifiers/expandir_excel.py
+  reportes.py              Wrapper compatible hacia libraries/reportes.py
+
+  libraries/
+    excel.py               Keywords Python explicitas para Excel
+    reportes.py            Keywords Python explicitas para evidencia
+
+  modifiers/
+    expandir_excel.py      Repite tests segun filas llenas del Excel
 
 variables/
   variables.xlsx           Datos de entrada por caso
@@ -29,6 +36,7 @@ variables/
 
 docs/
   KEYWORDS.md              Catalogo de keywords nativas y propias
+  STRUCTURE.md             Guia de capas y organizacion
 
 robot.args                 Argumentos comunes de ejecucion
 requirements.txt           Dependencias Python
@@ -76,11 +84,35 @@ python -m robot --argumentfile robot.args -t "TC-001 Validar pagina publica desd
 --outputdir
 results
 --prerunmodifier
-resources.expandir_excel.ExpandirCasosExcel
+resources.modifiers.expandir_excel.ExpandirCasosExcel
 ```
 
 El `prerunmodifier` revisa el Excel antes de ejecutar y repite cada caso por
 cada fila llena de datos.
+
+Para usar otro archivo Excel sin tocar codigo:
+
+```powershell
+python -m robot --outputdir results --prerunmodifier resources.modifiers.expandir_excel.ExpandirCasosExcel:variables/otro.xlsx tests/regresive.robot
+```
+
+## Capas del proyecto
+
+El repo queda separado en capas para que sea mas facil reutilizarlo:
+
+- `tests/`: solo contiene escenarios de prueba.
+- `resources/keywords.robot`: fachada legible para escribir pasos de negocio.
+- `resources/libraries/`: librerias Python con keywords declaradas
+  explicitamente con `@keyword`.
+- `resources/modifiers/`: extensiones que cambian el modelo de ejecucion de
+  Robot antes de correr.
+- `variables/`: datos de entrada por ambiente, caso o proyecto.
+- `docs/`: guias para mantener y reutilizar la plantilla.
+
+Los archivos `resources/reportes.py`, `resources/datos_excel.py` y
+`resources/expandir_excel.py` se mantienen como compatibilidad para imports
+anteriores, pero el codigo recomendado vive en `resources/libraries/` y
+`resources/modifiers/`.
 
 ## Flujo de Excel
 
@@ -145,12 +177,13 @@ Test Teardown   Finalizar caso de prueba
 ## Keywords
 
 El catalogo completo esta en `docs/KEYWORDS.md`.
+La guia de organizacion esta en `docs/STRUCTURE.md`.
 
 Las mas usadas son:
 
 | Keyword | Uso |
 | --- | --- |
-| `Preparar caso de prueba` | Carga Excel e inicia evidencia. |
+| `Preparar caso de prueba` | Carga Excel default o un archivo indicado e inicia evidencia. |
 | `Abrir navegador` | Abre navegador y registra evidencia. |
 | `Esperar elemento visible` | Espera un elemento antes de interactuar. |
 | `Presionar elemento` | Click sobre cualquier elemento. |

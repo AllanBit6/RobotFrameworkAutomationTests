@@ -3,6 +3,10 @@
 Este repositorio mezcla keywords nativas de Robot Framework/SeleniumLibrary con
 keywords propias que agregan lectura de Excel y evidencia HTML/PDF.
 
+Las keywords Python viven en `resources/libraries/` y estan declaradas con
+`@keyword` y `ROBOT_AUTO_KEYWORDS = False`. Eso evita que Robot publique metodos
+internos como keywords por accidente.
+
 ## Como leer este catalogo
 
 - Usa las keywords propias para los pasos de negocio del test.
@@ -15,7 +19,7 @@ keywords propias que agregan lectura de Excel y evidencia HTML/PDF.
 
 | Keyword | Argumentos | Uso |
 | --- | --- | --- |
-| `Preparar caso de prueba` | `${codigo_caso}=${EMPTY}`, `${fila}=1` | Carga variables desde Excel e inicia evidencia. Normalmente se usa como `Test Setup`. |
+| `Preparar caso de prueba` | `${codigo_caso}=${EMPTY}`, `${fila}=1`, `${archivo}=${EMPTY}` | Carga variables desde Excel e inicia evidencia. Normalmente se usa como `Test Setup`. |
 | `Finalizar caso de prueba` | `${cerrar_navegador}=True` | Cierra navegador, toma evidencia final y genera HTML/PDF. Normalmente se usa como `Test Teardown`. |
 | `Registrar evidencia` | `${descripcion}=Evidencia`, `${capturar_pantalla}=True` | Agrega un paso al reporte del caso. |
 | `Iniciar caso de prueba` | `${nombre}=None` | Inicia manualmente la evidencia de un caso. |
@@ -56,7 +60,7 @@ keywords propias que agregan lectura de Excel y evidencia HTML/PDF.
 
 ## Keywords Python de Excel
 
-Estas keywords vienen de `resources/datos_excel.py`.
+Estas keywords vienen de `resources/libraries/excel.py`.
 
 | Keyword | Argumentos | Uso |
 | --- | --- | --- |
